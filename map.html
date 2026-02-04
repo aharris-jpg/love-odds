@@ -75,17 +75,16 @@
       pointer-events:none;
     }
 
-    /* City labels: strong halo + tiny shadow */
+    /* City labels: stronger halo for readability */
     .label{
       font-weight:900;
       fill:#0B1220;
       paint-order:stroke;
       stroke:#ffffff;
-      stroke-width:4.2;
+      stroke-width:5.2; /* stronger halo */
       stroke-linejoin:round;
       pointer-events:none;
       letter-spacing:-0.01em;
-      text-shadow:0 1px 0 rgba(0,0,0,0.15);
     }
 
     .legend{
@@ -198,7 +197,7 @@
       <div class="notes">
         <p class="note"><b>Read it:</b> Each label shows the top city in that state. Darker means higher implied odds.</p>
         <div class="meta">
-          <b>Method:</b> Towns/cities (pop. 3K–50K) scored on walkability, venue density, and newcomer share.
+          <b>Method:</b> Cities/towns (pop. 3K–50K) scored on density, walk-to-work %, food & drink venues per 1K, and newcomer share. Odds are implied for comparison only.
           <b>Source:</b> U.S. Census (ACS, Gazetteer) + County Business Patterns.
         </div>
       </div>
@@ -274,7 +273,7 @@
   const projection = d3.geoAlbersUsa().scale(1300).translate([487,305]);
   const path = d3.geoPath(projection);
 
-  // Nudge small NE labels
+  // Manual nudges for small / dense states
   const labelOffset = {
     CT:[18,8], RI:[24,12], MA:[18,-6], VT:[-10,-6],
     NH:[12,-10], NJ:[22,10], DE:[18,12], MD:[10,18]
@@ -320,21 +319,29 @@
         if(!info) return -9999;
         const c = path.centroid(d);
         const off = labelOffset[info.abbr] || [0,0];
-        return c[1] + off[1];
+
+        // tiny vertical adjust for long names (reduces baseline collisions)
+        const yAdjust = info.city.length > 12 ? 3 : 0;
+        return c[1] + off[1] + yAdjust;
       })
       .attr("text-anchor","middle")
       .attr("font-size", d => {
         const info = loveData[d.properties.name];
         if(!info) return 0;
+
+        // standout boost for top-tier cities
+        if (info.prob >= 4.5) return 14.5;
+
+        // slightly smaller for dense small states
         const small = ["CT","RI","MA","NJ","DE","MD","VT","NH"];
-        if (info.prob >= 4.5) return 13.6;               // top-tier boost
-        return small.includes(info.abbr) ? 10.8 : 12.8;  // default sizing
+        return small.includes(info.abbr) ? 10.2 : 12.5;
       })
       .attr("font-weight", d => {
         const info = loveData[d.properties.name];
-        return info && info.prob >= 4.0 ? 950 : 900;
+        return info && info.prob >= 4.0 ? 1000 : 900;
       });
   });
 </script>
 </body>
 </html>
+
