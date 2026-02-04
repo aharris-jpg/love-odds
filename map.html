@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Love at First Sight Odds — By State</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- D3 + TopoJSON -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+
+  <style>
+    :root{
+      --bg:#FFF7F8;
+      --ink:#0B1220;
+      --muted:#667085;
+      --border:#FFFFFF;
+      --outline:rgba(11,18,32,0.15);
+
+      /* Valentine ramp (low → high) */
+      --m0:#FFF0F4;
+      --m1:#FFD1DD;
+      --m2:#FF9BB4;
+      --m3:#FF5C86;
+      --m4:#E11D48;
+      --m5:#5C081B;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      padding:20px 14px 22px;
+    }
+
+    .wrap{ max-width:1080px; margin:0 auto; }
+
+    .hero{ text-align:center; margin-bottom:10px; }
+
+    .title{
+      margin:0;
+      font-weight:950;
+      letter-spacing:-0.03em;
+      font-size:clamp(30px, 4.4vw, 48px);
+      line-height:1.02;
+    }
+
+    .card{
+      background:#fff;
+      border:1px solid rgba(11,18,32,0.08);
+      border-radius:16px;
+      overflow:hidden;
+    }
+
+    .map-wrap{ padding:12px 12px 0; }
+
+    svg{ width:100%; height:auto; display:block; }
+
+    /* Slightly thicker borders for screenshot clarity */
+    .state{
+      stroke:var(--border);
+      stroke-width:3.6;
+      stroke-linejoin:round;
+      stroke-linecap:round;
+    }
+
+    /* Subtle darker mesh on top for crisp separation */
+    .state-outline{
+      fill:none;
+      stroke:var(--outline);
+      stroke-width:1.2;
+      pointer-events:none;
+    }
+
+    /* City labels: strong halo + tiny shadow */
+    .label{
+      font-weight:900;
+      fill:#0B1220;
+      paint-order:stroke;
+      stroke:#ffffff;
+      stroke-width:4.2;
+      stroke-linejoin:round;
+      pointer-events:none;
+      letter-spacing:-0.01em;
+      text-shadow:0 1px 0 rgba(0,0,0,0.15);
+    }
+
+    .legend{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      padding:10px 14px;
+      border-top:1px solid rgba(11,18,32,0.06);
+      background:#fff;
+    }
+
+    .legend span{
+      font-size:12px;
+      font-weight:900;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:0.04em;
+    }
+
+    .legend .bar{
+      width:min(430px, 74vw);
+      height:12px;
+      border-radius:999px;
+      background:linear-gradient(
+        90deg,
+        var(--m0),
+        var(--m1),
+        var(--m2),
+        var(--m3),
+        var(--m4),
+        var(--m5)
+      );
+      border:1px solid rgba(11,18,32,0.12);
+    }
+
+    .under{
+      padding:10px 14px 14px;
+      border-top:1px solid rgba(11,18,32,0.06);
+      background:#fff;
+      display:flex;
+      gap:14px;
+      justify-content:space-between;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+
+    .notes{
+      flex:1 1 620px;
+      min-width:280px;
+    }
+
+    .note{
+      margin:0;
+      font-size:12px;
+      line-height:1.2;
+      color:var(--muted);
+      font-weight:750;
+    }
+    .note b{ color:var(--ink); font-weight:950; }
+
+    .meta{
+      margin-top:5px;
+      font-size:11px;
+      line-height:1.2;
+      color:rgba(11,18,32,0.62);
+      font-weight:750;
+    }
+
+    .brand{
+      flex:0 0 auto;
+      text-align:right;
+    }
+
+    .credit{
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:0.03em;
+      text-transform:uppercase;
+      color:rgba(11,18,32,0.55);
+      margin-bottom:6px;
+    }
+
+    .brand img{
+      height:42px;
+      width:auto;
+      display:block;
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1 class="title">Love at First Sight Odds — By State</h1>
+  </div>
+
+  <div class="card">
+    <div class="map-wrap">
+      <svg id="map" viewBox="0 0 975 610" aria-label="Love at First Sight map"></svg>
+    </div>
+
+    <div class="legend">
+      <span>Lower</span>
+      <div class="bar"></div>
+      <span>Higher</span>
+    </div>
+
+    <div class="under">
+      <div class="notes">
+        <p class="note"><b>Read it:</b> Each label shows the top city in that state. Darker means higher implied odds.</p>
+        <div class="meta">
+          <b>Method:</b> Towns/cities (pop. 3K–50K) scored on walkability, venue density, and newcomer share.
+          <b>Source:</b> U.S. Census (ACS, Gazetteer) + County Business Patterns.
+        </div>
+      </div>
+
+      <div class="brand">
+        <div class="credit">Created by: VegasInsider.com</div>
+        <img src="https://i.postimg.cc/CMn3qBSN/download.png" alt="Vegas Insider logo">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Top city per state (static map)
+  const loveData = {
+    "Alabama":{abbr:"AL",city:"Tuskegee",prob:1.78},
+    "Alaska":{abbr:"AK",city:"Bethel",prob:2.29},
+    "Arizona":{abbr:"AZ",city:"Williams",prob:3.41},
+    "Arkansas":{abbr:"AR",city:"Green Forest",prob:2.28},
+    "California":{abbr:"CA",city:"Avalon",prob:3.37},
+    "Colorado":{abbr:"CO",city:"Breckenridge",prob:4.78},
+    "Connecticut":{abbr:"CT",city:"Groton",prob:2.88},
+    "Delaware":{abbr:"DE",city:"Newark",prob:2.56},
+    "Florida":{abbr:"FL",city:"Naples",prob:4.12},
+    "Georgia":{abbr:"GA",city:"Cumming",prob:3.55},
+    "Idaho":{abbr:"ID",city:"Sun Valley",prob:2.99},
+    "Illinois":{abbr:"IL",city:"Oak Brook",prob:2.60},
+    "Indiana":{abbr:"IN",city:"Carmel",prob:2.59},
+    "Iowa":{abbr:"IA",city:"Coralville",prob:2.42},
+    "Kansas":{abbr:"KS",city:"Leawood",prob:2.51},
+    "Kentucky":{abbr:"KY",city:"Fort Thomas",prob:2.61},
+    "Louisiana":{abbr:"LA",city:"Mandeville",prob:2.29},
+    "Maine":{abbr:"ME",city:"Bar Harbor",prob:2.94},
+    "Maryland":{abbr:"MD",city:"Ocean City",prob:3.15},
+    "Massachusetts":{abbr:"MA",city:"Provincetown",prob:3.18},
+    "Michigan":{abbr:"MI",city:"Utica",prob:5.00},
+    "Minnesota":{abbr:"MN",city:"Wayzata",prob:2.85},
+    "Mississippi":{abbr:"MS",city:"Bay St. Louis",prob:2.51},
+    "Missouri":{abbr:"MO",city:"Clayton",prob:2.86},
+    "Montana":{abbr:"MT",city:"Whitefish",prob:2.86},
+    "Nebraska":{abbr:"NE",city:"Gretna",prob:2.33},
+    "Nevada":{abbr:"NV",city:"Incline Village",prob:2.86},
+    "New Hampshire":{abbr:"NH",city:"Hanover",prob:3.16},
+    "New Jersey":{abbr:"NJ",city:"Wildwood",prob:4.58},
+    "New Mexico":{abbr:"NM",city:"Taos",prob:2.55},
+    "New York":{abbr:"NY",city:"Ithaca",prob:3.71},
+    "North Carolina":{abbr:"NC",city:"Blowing Rock",prob:2.88},
+    "North Dakota":{abbr:"ND",city:"Devils Lake",prob:2.62},
+    "Ohio":{abbr:"OH",city:"Put-in-Bay",prob:3.13},
+    "Oklahoma":{abbr:"OK",city:"Guthrie",prob:2.29},
+    "Oregon":{abbr:"OR",city:"Cannon Beach",prob:3.27},
+    "Pennsylvania":{abbr:"PA",city:"Lewisburg",prob:4.44},
+    "Rhode Island":{abbr:"RI",city:"Newport",prob:3.08},
+    "South Carolina":{abbr:"SC",city:"Edgefield",prob:3.55},
+    "South Dakota":{abbr:"SD",city:"Hot Springs",prob:2.50},
+    "Tennessee":{abbr:"TN",city:"Gatlinburg",prob:3.02},
+    "Texas":{abbr:"TX",city:"Katy",prob:3.83},
+    "Utah":{abbr:"UT",city:"Park City",prob:3.25},
+    "Vermont":{abbr:"VT",city:"Stowe",prob:2.98},
+    "Virginia":{abbr:"VA",city:"Vienna",prob:3.09},
+    "Washington":{abbr:"WA",city:"Leavenworth",prob:3.55},
+    "West Virginia":{abbr:"WV",city:"Charles Town",prob:3.01},
+    "Wisconsin":{abbr:"WI",city:"Delafield",prob:2.86},
+    "Wyoming":{abbr:"WY",city:"Jackson",prob:2.82}
+  };
+
+  const ramp = ["#FFF0F4","#FFD1DD","#FF9BB4","#FF5C86","#E11D48","#5C081B"];
+  const color = d3.scaleQuantize()
+    .domain(d3.extent(Object.values(loveData), d => d.prob))
+    .range(ramp);
+
+  const svg = d3.select("#map");
+  const projection = d3.geoAlbersUsa().scale(1300).translate([487,305]);
+  const path = d3.geoPath(projection);
+
+  // Nudge small NE labels
+  const labelOffset = {
+    CT:[18,8], RI:[24,12], MA:[18,-6], VT:[-10,-6],
+    NH:[12,-10], NJ:[22,10], DE:[18,12], MD:[10,18]
+  };
+
+  d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json").then(us => {
+    const states = topojson.feature(us, us.objects.states).features;
+
+    svg.selectAll("path.state")
+      .data(states)
+      .join("path")
+      .attr("class","state")
+      .attr("d", path)
+      .attr("fill", d => {
+        const info = loveData[d.properties.name];
+        return info ? color(info.prob) : "#F3F4F6";
+      });
+
+    svg.append("path")
+      .datum(topojson.mesh(us, us.objects.states, (a,b)=>a!==b))
+      .attr("class","state-outline")
+      .attr("d", path);
+
+    svg.append("g")
+      .attr("aria-hidden","true")
+      .selectAll("text.label")
+      .data(states)
+      .join("text")
+      .attr("class","label")
+      .text(d => {
+        const info = loveData[d.properties.name];
+        return info ? info.city : "";
+      })
+      .attr("x", d => {
+        const info = loveData[d.properties.name];
+        if(!info) return -9999;
+        const c = path.centroid(d);
+        const off = labelOffset[info.abbr] || [0,0];
+        return c[0] + off[0];
+      })
+      .attr("y", d => {
+        const info = loveData[d.properties.name];
+        if(!info) return -9999;
+        const c = path.centroid(d);
+        const off = labelOffset[info.abbr] || [0,0];
+        return c[1] + off[1];
+      })
+      .attr("text-anchor","middle")
+      .attr("font-size", d => {
+        const info = loveData[d.properties.name];
+        if(!info) return 0;
+        const small = ["CT","RI","MA","NJ","DE","MD","VT","NH"];
+        if (info.prob >= 4.5) return 13.6;               // top-tier boost
+        return small.includes(info.abbr) ? 10.8 : 12.8;  // default sizing
+      })
+      .attr("font-weight", d => {
+        const info = loveData[d.properties.name];
+        return info && info.prob >= 4.0 ? 950 : 900;
+      });
+  });
+</script>
+</body>
+</html>
