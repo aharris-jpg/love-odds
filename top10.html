@@ -4,240 +4,284 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>10 Top Cities Where Love at First Sight Is Most Likely</title>
+<style>
+  :root{
+    /* Map-matching Valentine palette (simple + high contrast) */
+    --bg:#FFF7F8;
+    --ink:#0B1220;
+    --muted:rgba(11,18,32,.65);
+    --card:#FFFFFF;
+    --border:rgba(11,18,32,.12);
+
+    --rose-50:#FFF0F4;
+    --rose-200:#FFB3C7;
+    --rose-500:#E11D48;
+    --rose-800:#5C081B;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    padding:16px;
+  }
+
+  .wrap{
+    max-width:980px;
+    margin:0 auto;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 2px 6px rgba(0,0,0,.05),0 12px 28px rgba(92,8,27,.12);
+  }
+
+  .head{
+    padding:14px 16px;
+    color:#fff;
+    background:
+      radial-gradient(140% 160% at 90% 0%, rgba(255,255,255,.22) 0%, transparent 55%),
+      linear-gradient(120deg,var(--rose-800) 0%, var(--rose-500) 55%, var(--rose-200) 110%);
+    position:relative;
+  }
+  .head::after{
+    content:"❤";
+    position:absolute;
+    right:14px;
+    top:10px;
+    font-size:20px;
+    opacity:.9;
+  }
+
+  h2{
+    margin:0 0 4px;
+    font-size:18px;
+    font-weight:950;
+    letter-spacing:-0.01em;
+  }
+  .sub{
+    margin:0;
+    font-size:12px;
+    opacity:.95;
+  }
+
+  .table-wrap{
+    padding:12px;
+    background:linear-gradient(180deg,var(--rose-50),#fff 50%);
+  }
+
+  /* Horizontal scroll container */
+  .scroll{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:#fff;
+  }
+
+  table{
+    border-collapse:separate;
+    border-spacing:0;
+    min-width:860px; /* forces scroll on narrow screens */
+    width:100%;
+  }
+
+  thead th{
+    position:sticky;
+    top:0;
+    background:#fff;
+    z-index:1;
+    text-align:left;
+    padding:10px 10px;
+    font-size:11px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:rgba(11,18,32,.75);
+    border-bottom:1px solid var(--border);
+    white-space:nowrap;
+  }
+
+  tbody td{
+    padding:10px 10px;
+    border-bottom:1px solid rgba(11,18,32,.08);
+    vertical-align:middle;
+    white-space:nowrap;
+  }
+  tbody tr:last-child td{ border-bottom:none; }
+
+  .rank{
+    width:56px;
+    font-weight:900;
+    color:rgba(11,18,32,.72);
+  }
+  .rank .dot{
+    display:inline-flex;
+    width:24px;height:24px;
+    align-items:center;
+    justify-content:center;
+    border-radius:999px;
+    background:var(--rose-50);
+    border:1px solid rgba(11,18,32,.10);
+    font-variant-numeric:tabular-nums;
+  }
+  tbody tr:first-child .rank .dot{
+    background:radial-gradient(circle at 30% 25%, #fff 0%, #FFD1DD 35%, #FF5C86 100%);
+    border-color:rgba(92,8,27,.25);
+    color:#3a0a16;
+  }
+
+  .city{
+    font-weight:900;
+  }
+  .state{
+    display:inline-block;
+    margin-left:6px;
+    padding:2px 8px;
+    border-radius:999px;
+    border:1px solid rgba(92,8,27,.18);
+    background:rgba(225,29,72,.06);
+    color:rgba(92,8,27,.92);
+    font-size:11px;
+    font-weight:850;
+    vertical-align:middle;
+  }
+
+  .odds{
+    font-variant-numeric:tabular-nums;
+    font-weight:900;
+    color:var(--rose-800);
+  }
+  .muted{
+    color:var(--muted);
+    font-size:11px;
+    font-variant-numeric:tabular-nums;
+  }
+
+  .footer{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:12px;
+    flex-wrap:wrap;
+    padding:10px 12px;
+    border-top:1px solid var(--border);
+    background:#fff;
+  }
+  .footer p{
+    margin:0;
+    font-size:11px;
+    color:rgba(11,18,32,.68);
+    max-width:720px;
+  }
+  .brand{
+    text-align:right;
+  }
+  .brand small{
+    display:block;
+    font-size:10px;
+    letter-spacing:.06em;
+    font-weight:850;
+    text-transform:uppercase;
+    color:rgba(11,18,32,.55);
+  }
+  .brand img{
+    height:34px;
+    margin-top:4px;
+  }
+</style>
 </head>
 
-<body style="margin:0;background:#ffffff;">
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="head">
+        <h2>10 Top Cities Where Love at First Sight Is Most Likely</h2>
+        <p class="sub">Top-ranked city in each state, then sorted by implied odds (highest to lowest).</p>
+      </div>
 
-<section class="vi-love-cities"
-  style="max-width:880px;margin:16px auto;
-         font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-         color:#0B1220;
-         border:1px solid rgba(11,18,32,.10);
-         border-radius:14px;
-         box-shadow:0 2px 6px rgba(0,0,0,.05),0 12px 28px rgba(92,8,27,.15);">
+      <div class="table-wrap">
+        <div class="scroll" role="region" aria-label="Scrollable table">
+          <table aria-describedby="methodNote">
+            <thead>
+              <tr>
+                <th style="width:70px;">Rank</th>
+                <th>City</th>
+                <th>Implied odds</th>
+                <th>Pop</th>
+                <th>Density / sq mi</th>
+                <th>Food &amp; drink / 1k</th>
+                <th>Walk %</th>
+                <th>New residents %</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
 
-<style>
-.vi-love-cities, .vi-love-cities * { box-sizing:border-box; }
-
-.vi-love-cities{
-  --dark:#5C081B;
-  --mid:#E11D48;
-  --soft:#FF9BB4;
-  --pale:#FFF0F4;
-  --ink:#0B1220;
-  --muted:#667085;
-  --border:rgba(11,18,32,.12);
-}
-
-.vi-love-cities .head{
-  padding:16px;
-  border-bottom:1px solid var(--border);
-  background:
-    radial-gradient(140% 160% at 90% 0%, rgba(255,255,255,.25) 0%, transparent 55%),
-    linear-gradient(120deg,var(--dark) 0%,var(--mid) 45%,var(--soft) 100%);
-  color:#fff;
-  border-top-left-radius:14px;
-  border-top-right-radius:14px;
-  position:relative;
-}
-
-.vi-love-cities .head::after{
-  content:"❤";
-  position:absolute;
-  right:16px;
-  top:12px;
-  font-size:22px;
-  opacity:.9;
-}
-
-.vi-love-cities h2{
-  margin:0 0 4px;
-  font-size:20px;
-  font-weight:900;
-  letter-spacing:-0.01em;
-}
-
-.vi-love-cities .sub{
-  margin:0;
-  font-size:12px;
-  opacity:.95;
-}
-
-.vi-love-cities .table{
-  padding:12px;
-  background:linear-gradient(180deg,var(--pale),#ffffff 40%);
-}
-
-.vi-love-cities .row{
-  display:grid;
-  grid-template-columns:42px minmax(0,1.3fr) minmax(0,1fr);
-  gap:10px;
-  align-items:center;
-  margin:8px 0;
-  padding:10px;
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:12px;
-}
-
-@media(max-width:640px){
-  .vi-love-cities .row{ grid-template-columns:36px 1fr; }
-  .vi-love-cities .metric{ grid-column:1/-1; }
-}
-
-.rank{
-  display:flex;
-  justify-content:center;
-  font-weight:900;
-  color:var(--muted);
-}
-.rank span{
-  width:28px;height:28px;
-  border-radius:50%;
-  background:var(--pale);
-  border:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.row[data-rank="1"] .rank span{
-  background:radial-gradient(circle at 30% 25%,#fff 0%,#FFD1DD 35%,#FF5C86 100%);
-  color:#3a0a16;
-}
-
-.place{
-  display:flex;
-  flex-direction:column;
-  gap:2px;
-}
-.place strong{
-  font-weight:850;
-}
-.place small{
-  font-size:11px;
-  color:var(--muted);
-}
-
-.metric{
-  position:relative;
-  height:32px;
-  border-radius:999px;
-  background:var(--pale);
-  border:1px solid var(--border);
-  overflow:hidden;
-  padding-right:150px;
-}
-.bar{
-  position:absolute;
-  inset:0 auto 0 0;
-  border-radius:999px;
-  background:linear-gradient(90deg,var(--soft),var(--mid),var(--dark));
-}
-.metric-inner{
-  position:absolute;
-  inset:0 8px 0 auto;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:12px;
-  font-variant-numeric:tabular-nums;
-}
-.chip{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:999px;
-  padding:4px 8px;
-}
-.chip strong{ color:var(--dark); }
-
-.footer{
-  padding:10px 12px;
-  border-top:1px solid var(--border);
-  background:#fff;
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  gap:12px;
-  flex-wrap:wrap;
-}
-.footer p{
-  margin:0;
-  font-size:11px;
-  color:rgba(11,18,32,.65);
-  max-width:620px;
-}
-.brand{
-  text-align:right;
-}
-.brand small{
-  display:block;
-  font-size:10px;
-  letter-spacing:.04em;
-  font-weight:800;
-  text-transform:uppercase;
-  color:rgba(11,18,32,.55);
-}
-.brand img{
-  height:36px;
-  margin-top:4px;
-}
-</style>
-
-<div class="head">
-  <h2>10 Top Cities Where Love at First Sight Is Most Likely</h2>
-  <p class="sub">One top-ranked city per state, based on implied odds.</p>
-</div>
-
-<div class="table" id="rows"></div>
-
-<div class="footer">
-  <p>
-    <strong>Method:</strong> Cities ranked by population density, walkability, food & drink venues per 1,000 residents,
-    and share of new residents. Odds shown are implied for comparison only.
-    <br><strong>Source:</strong> U.S. Census Bureau (ACS), County Business Patterns.
-  </p>
-  <div class="brand">
-    <small>Created by</small>
-    <img src="https://i.postimg.cc/CMn3qBSN/download.png" alt="Vegas Insider">
+      <div class="footer">
+        <p id="methodNote">
+          <strong>Read it:</strong> Higher odds = more “meet-cute” conditions (density, walk-to-work, venues, newcomers).
+          <strong>Method:</strong> U.S. cities/towns (pop 3K–50K) scored on chance encounters (40%), meet-cute venues (35%), newcomers (25%).
+          Odds are implied for comparison only.
+          <br><strong>Sources:</strong> U.S. Census (ACS S0801/S0701, Gazetteer) + County Business Patterns (NAICS 722).
+        </p>
+        <div class="brand">
+          <small>Created by: vegasinsider.com</small>
+          <img src="https://i.postimg.cc/CMn3qBSN/download.png" alt="Vegas Insider">
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
 <script>
-const data = [
- {rank:1, city:"Utica", st:"MI", prob:5.00, odds:20.0},
- {rank:2, city:"Breckenridge", st:"CO", prob:4.78, odds:20.9},
- {rank:3, city:"Wildwood", st:"NJ", prob:4.58, odds:21.8},
- {rank:4, city:"Lewisburg", st:"PA", prob:4.44, odds:22.5},
- {rank:5, city:"Naples", st:"FL", prob:4.12, odds:24.3},
- {rank:6, city:"Katy", st:"TX", prob:3.83, odds:26.1},
- {rank:7, city:"Ithaca", st:"NY", prob:3.71, odds:27.0},
- {rank:8, city:"Cumming", st:"GA", prob:3.55, odds:28.1},
- {rank:9, city:"Edgefield", st:"SC", prob:3.55, odds:28.2},
- {rank:10, city:"Williams", st:"AZ", prob:3.41, odds:29.3}
-];
+  // Top-ranked city in each state (Backend_data), then top 10 by implied probability.
+  // City names cleaned for display (city/town/borough removed).
+  const data = [
+    {rank:1,  city:"Utica",        st:"MI", prob:5.000000, oddsX:20.000000, pop:5139,  dens:2921.546333, venues:47.480054, walk:2.6,  newp:8.2},
+    {rank:2,  city:"Breckenridge", st:"CO", prob:4.782713, oddsX:20.908634, pop:4892,  dens:809.799702,  venues:19.623876, walk:12.7, newp:37.5},
+    {rank:3,  city:"Wildwood",     st:"NJ", prob:4.581504, oddsX:21.826896, pop:5098,  dens:3308.241402, venues:36.681051, walk:11.6, newp:9.5},
+    {rank:4,  city:"Lewisburg",    st:"PA", prob:4.438333, oddsX:22.530981, pop:5253,  dens:5398.766701, venues:9.899105,  walk:34.6, newp:24.4},
+    {rank:5,  city:"Naples",       st:"FL", prob:4.119561, oddsX:24.274430, pop:20168, dens:1639.274974, venues:38.823879, walk:1.8,  newp:8.4},
+    {rank:6,  city:"Katy",         st:"TX", prob:3.828933, oddsX:26.116939, pop:27741, dens:1814.323087, venues:27.864893, walk:1.0,  newp:18.7},
+    {rank:7,  city:"Ithaca",       st:"NY", prob:3.710358, oddsX:26.951579, pop:33768, dens:6266.097606, venues:5.389718,  walk:25.7, newp:24.1},
+    {rank:8,  city:"Cumming",      st:"GA", prob:3.553780, oddsX:28.139054, pop:10175, dens:1332.853026, venues:29.090909, walk:0.3,  newp:14.0},
+    {rank:9,  city:"Edgefield",    st:"SC", prob:3.547517, oddsX:28.188732, pop:4147,  dens:957.736721,  venues:3.134796,  walk:6.3,  newp:44.5},
+    {rank:10, city:"Williams",     st:"AZ", prob:3.409346, oddsX:29.331141, pop:3482,  dens:79.445116,   venues:10.051694, walk:9.8,  newp:32.1},
+  ];
 
-const max = Math.max(...data.map(d=>d.prob));
-document.getElementById("rows").innerHTML = data.map(d=>{
- const w = (d.prob/max)*100;
- return `
- <div class="row" data-rank="${d.rank}">
-   <div class="rank"><span>${d.rank}</span></div>
-   <div class="place">
-     <strong>${d.city}, ${d.st}</strong>
-     <small>Top city in ${d.st}</small>
-   </div>
-   <div class="metric">
-     <div class="bar" style="width:${w}%"></div>
-     <div class="metric-inner">
-       <span class="chip"><strong>${d.prob.toFixed(2)}%</strong></span>
-       <span class="chip">≈ 1 in ${d.odds}</span>
-     </div>
-   </div>
- </div>`;
-}).join("");
+  const fmtInt = n => Number(n).toLocaleString("en-US");
+  const fmt1   = n => Number(n).toLocaleString("en-US",{maximumFractionDigits:1});
+  const fmt0   = n => Number(n).toLocaleString("en-US",{maximumFractionDigits:0});
+
+  const tbody = document.getElementById("rows");
+  tbody.innerHTML = data.map(d => {
+    const oneIn = Math.max(1, Math.round(d.oddsX));
+    return `
+      <tr>
+        <td class="rank"><span class="dot">${d.rank}</span></td>
+        <td>
+          <span class="city">${d.city}</span>
+          <span class="state">${d.st}</span>
+        </td>
+        <td>
+          <div class="odds">${d.prob.toFixed(1)}%</div>
+          <div class="muted">≈ 1 in ${oneIn}</div>
+        </td>
+        <td>${fmtInt(d.pop)}</td>
+        <td>${fmt0(d.dens)}</td>
+        <td>${fmt1(d.venues)}</td>
+        <td>${d.walk.toFixed(1)}%</td>
+        <td>${d.newp.toFixed(1)}%</td>
+      </tr>
+    `;
+  }).join("");
 </script>
-
-</section>
-
 </body>
 </html>
