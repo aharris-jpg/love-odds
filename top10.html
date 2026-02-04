@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>10 Top Cities Where Love at First Sight Is Most Likely</title>
+</head>
+
+<body style="margin:0;background:#ffffff;">
+
+<section class="vi-love-cities"
+  style="max-width:880px;margin:16px auto;
+         font:14px/1.35 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+         color:#0B1220;
+         border:1px solid rgba(11,18,32,.10);
+         border-radius:14px;
+         box-shadow:0 2px 6px rgba(0,0,0,.05),0 12px 28px rgba(92,8,27,.15);">
+
+<style>
+.vi-love-cities, .vi-love-cities * { box-sizing:border-box; }
+
+.vi-love-cities{
+  --dark:#5C081B;
+  --mid:#E11D48;
+  --soft:#FF9BB4;
+  --pale:#FFF0F4;
+  --ink:#0B1220;
+  --muted:#667085;
+  --border:rgba(11,18,32,.12);
+}
+
+.vi-love-cities .head{
+  padding:16px;
+  border-bottom:1px solid var(--border);
+  background:
+    radial-gradient(140% 160% at 90% 0%, rgba(255,255,255,.25) 0%, transparent 55%),
+    linear-gradient(120deg,var(--dark) 0%,var(--mid) 45%,var(--soft) 100%);
+  color:#fff;
+  border-top-left-radius:14px;
+  border-top-right-radius:14px;
+  position:relative;
+}
+
+.vi-love-cities .head::after{
+  content:"❤";
+  position:absolute;
+  right:16px;
+  top:12px;
+  font-size:22px;
+  opacity:.9;
+}
+
+.vi-love-cities h2{
+  margin:0 0 4px;
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:-0.01em;
+}
+
+.vi-love-cities .sub{
+  margin:0;
+  font-size:12px;
+  opacity:.95;
+}
+
+.vi-love-cities .table{
+  padding:12px;
+  background:linear-gradient(180deg,var(--pale),#ffffff 40%);
+}
+
+.vi-love-cities .row{
+  display:grid;
+  grid-template-columns:42px minmax(0,1.3fr) minmax(0,1fr);
+  gap:10px;
+  align-items:center;
+  margin:8px 0;
+  padding:10px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:12px;
+}
+
+@media(max-width:640px){
+  .vi-love-cities .row{ grid-template-columns:36px 1fr; }
+  .vi-love-cities .metric{ grid-column:1/-1; }
+}
+
+.rank{
+  display:flex;
+  justify-content:center;
+  font-weight:900;
+  color:var(--muted);
+}
+.rank span{
+  width:28px;height:28px;
+  border-radius:50%;
+  background:var(--pale);
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.row[data-rank="1"] .rank span{
+  background:radial-gradient(circle at 30% 25%,#fff 0%,#FFD1DD 35%,#FF5C86 100%);
+  color:#3a0a16;
+}
+
+.place{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.place strong{
+  font-weight:850;
+}
+.place small{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.metric{
+  position:relative;
+  height:32px;
+  border-radius:999px;
+  background:var(--pale);
+  border:1px solid var(--border);
+  overflow:hidden;
+  padding-right:150px;
+}
+.bar{
+  position:absolute;
+  inset:0 auto 0 0;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--soft),var(--mid),var(--dark));
+}
+.metric-inner{
+  position:absolute;
+  inset:0 8px 0 auto;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  font-variant-numeric:tabular-nums;
+}
+.chip{
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:4px 8px;
+}
+.chip strong{ color:var(--dark); }
+
+.footer{
+  padding:10px 12px;
+  border-top:1px solid var(--border);
+  background:#fff;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.footer p{
+  margin:0;
+  font-size:11px;
+  color:rgba(11,18,32,.65);
+  max-width:620px;
+}
+.brand{
+  text-align:right;
+}
+.brand small{
+  display:block;
+  font-size:10px;
+  letter-spacing:.04em;
+  font-weight:800;
+  text-transform:uppercase;
+  color:rgba(11,18,32,.55);
+}
+.brand img{
+  height:36px;
+  margin-top:4px;
+}
+</style>
+
+<div class="head">
+  <h2>10 Top Cities Where Love at First Sight Is Most Likely</h2>
+  <p class="sub">One top-ranked city per state, based on implied odds.</p>
+</div>
+
+<div class="table" id="rows"></div>
+
+<div class="footer">
+  <p>
+    <strong>Method:</strong> Cities ranked by population density, walkability, food & drink venues per 1,000 residents,
+    and share of new residents. Odds shown are implied for comparison only.
+    <br><strong>Source:</strong> U.S. Census Bureau (ACS), County Business Patterns.
+  </p>
+  <div class="brand">
+    <small>Created by</small>
+    <img src="https://i.postimg.cc/CMn3qBSN/download.png" alt="Vegas Insider">
+  </div>
+</div>
+
+<script>
+const data = [
+ {rank:1, city:"Utica", st:"MI", prob:5.00, odds:20.0},
+ {rank:2, city:"Breckenridge", st:"CO", prob:4.78, odds:20.9},
+ {rank:3, city:"Wildwood", st:"NJ", prob:4.58, odds:21.8},
+ {rank:4, city:"Lewisburg", st:"PA", prob:4.44, odds:22.5},
+ {rank:5, city:"Naples", st:"FL", prob:4.12, odds:24.3},
+ {rank:6, city:"Katy", st:"TX", prob:3.83, odds:26.1},
+ {rank:7, city:"Ithaca", st:"NY", prob:3.71, odds:27.0},
+ {rank:8, city:"Cumming", st:"GA", prob:3.55, odds:28.1},
+ {rank:9, city:"Edgefield", st:"SC", prob:3.55, odds:28.2},
+ {rank:10, city:"Williams", st:"AZ", prob:3.41, odds:29.3}
+];
+
+const max = Math.max(...data.map(d=>d.prob));
+document.getElementById("rows").innerHTML = data.map(d=>{
+ const w = (d.prob/max)*100;
+ return `
+ <div class="row" data-rank="${d.rank}">
+   <div class="rank"><span>${d.rank}</span></div>
+   <div class="place">
+     <strong>${d.city}, ${d.st}</strong>
+     <small>Top city in ${d.st}</small>
+   </div>
+   <div class="metric">
+     <div class="bar" style="width:${w}%"></div>
+     <div class="metric-inner">
+       <span class="chip"><strong>${d.prob.toFixed(2)}%</strong></span>
+       <span class="chip">≈ 1 in ${d.odds}</span>
+     </div>
+   </div>
+ </div>`;
+}).join("");
+</script>
+
+</section>
+
+</body>
+</html>
